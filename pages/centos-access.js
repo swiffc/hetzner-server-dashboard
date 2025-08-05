@@ -75,11 +75,11 @@ sudo reboot`;
               <p>Full system management with terminal, file manager, monitoring, and more:</p>
               <button 
                 className="access-btn cockpit-btn"
-                onClick={() => window.open(`/api/proxy?target=http://${serverIp}:9090`, '_blank')}
+                onClick={() => window.open('/api/cockpit', '_blank')}
               >
                 🌐 Open Cockpit Interface
               </button>
-              <p className="access-url">Via Vercel Proxy: /api/proxy?target=http://{serverIp}:9090</p>
+              <p className="access-url">Via Vercel Proxy: /api/cockpit</p>
               <p className="direct-url">Direct URL: http://{serverIp}:9090</p>
             </div>
           </div>
