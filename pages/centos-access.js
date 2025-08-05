@@ -66,16 +66,35 @@ sudo reboot`;
             />
           </div>
 
-          <div className="access-buttons">
-            <button 
-              onClick={openCentOSDesktop} 
-              className="access-btn desktop"
-              disabled={!serverIp}
-            >
-              🖥️ Open CentOS Desktop
-              <span className="port-info">Port: 6080</span>
-            </button>
+          <div className="access-section">
+            <h2>🌐 CentOS Cockpit Access</h2>
+            <p>Access your full CentOS system management interface through Cockpit:</p>
             
+            <div className="access-option">
+              <h3>Cockpit Web Interface</h3>
+              <p>Full system management with terminal, file manager, monitoring, and more:</p>
+              <button 
+                className="access-btn cockpit-btn"
+                onClick={() => window.open(`/api/proxy?target=http://${serverIp}:9090`, '_blank')}
+              >
+                🌐 Open Cockpit Interface
+              </button>
+              <p className="access-url">Via Vercel Proxy: /api/proxy?target=http://{serverIp}:9090</p>
+              <p className="direct-url">Direct URL: http://{serverIp}:9090</p>
+            </div>
+          </div>
+
+          <div className="access-section">
+            <h2>🔐 Login Information</h2>
+            <p>Use your CentOS system credentials to log into Cockpit:</p>
+            <div className="login-info">
+              <p><strong>Username:</strong> root</p>
+              <p><strong>Password:</strong> Your root password</p>
+              <p><strong>Features:</strong> Terminal, File Manager, System Monitoring, Service Management</p>
+            </div>
+          </div>
+
+          <div className="access-buttons">
             <button 
               onClick={openCentOSTerminal} 
               className="access-btn terminal"
