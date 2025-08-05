@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const router = useRouter();
   const [serverIp, setServerIp] = useState('');
-  const [isSetup, setIsSetup] = useState(false);
 
   const openCentOSDesktop = () => {
     if (serverIp) {
@@ -19,59 +20,46 @@ export default function Home() {
     }
   };
 
-  const copySetupCommands = () => {
-    const commands = `# CentOS GUI Setup Commands
-wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-gui-setup.sh
-chmod +x centos-gui-setup.sh
-./centos-gui-setup.sh
-
-# CentOS Web Terminal Setup
-wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-web-terminal.sh
-chmod +x centos-web-terminal.sh
-./centos-web-terminal.sh`;
-    
-    navigator.clipboard.writeText(commands).then(() => {
-      alert('Setup commands copied to clipboard!');
-    });
+  const goToCentOSAccess = () => {
+    router.push('/centos-access');
   };
 
   return (
     <div className="container">
       <Head>
-        <title>CentOS Direct Access - Hetzner Server</title>
-        <meta name="description" content="Direct access to your CentOS desktop and terminal" />
+        <title>CentOS Server Access - Hetzner Dashboard</title>
+        <meta name="description" content="Direct access to your CentOS server desktop and terminal" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className="main">
         <h1 className="title">
-          🖥️ CentOS Direct Access
+          🖥️ CentOS Server Access
         </h1>
 
         <p className="description">
-          Access your CentOS desktop and terminal directly through your browser
+          Access your CentOS server desktop and terminal directly through your browser
         </p>
 
         <div className="access-card">
-          <h2>Enter Your CentOS Server IP</h2>
+          <h2>Quick Access</h2>
           <div className="input-group">
             <input
               type="text"
-              placeholder="e.g., 192.168.1.100 or your-server.com"
+              placeholder="Enter your CentOS server IP (e.g., 192.168.1.100)"
               value={serverIp}
               onChange={(e) => setServerIp(e.target.value)}
               className="server-input"
             />
           </div>
 
-          <div className="access-buttons">
+          <div className="button-group">
             <button 
               onClick={openCentOSDesktop} 
               className="access-btn desktop"
               disabled={!serverIp}
             >
-              🖥️ Open CentOS Desktop
-              <span className="port-info">Port: 6080</span>
+              🖥️ Open Desktop
             </button>
             
             <button 
@@ -79,68 +67,26 @@ chmod +x centos-web-terminal.sh
               className="access-btn terminal"
               disabled={!serverIp}
             >
-              💻 Open CentOS Terminal
-              <span className="port-info">Port: 7681</span>
+              💻 Open Terminal
+            </button>
+            
+            <button 
+              onClick={goToCentOSAccess} 
+              className="access-btn setup"
+            >
+              ⚙️ Setup Guide
             </button>
           </div>
         </div>
 
-        <div className="setup-card">
-          <h2>🚀 First Time Setup Required</h2>
-          <p>Run these commands on your CentOS server to enable GUI and terminal access:</p>
-          
-          <div className="setup-steps">
-            <div className="step">
-              <h3>Step 1: Install GUI Desktop</h3>
-              <div className="code-block">
-                <code>
-                  wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-gui-setup.sh<br/>
-                  chmod +x centos-gui-setup.sh<br/>
-                  ./centos-gui-setup.sh
-                </code>
-              </div>
-            </div>
-            
-            <div className="step">
-              <h3>Step 2: Install Web Terminal</h3>
-              <div className="code-block">
-                <code>
-                  wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-web-terminal.sh<br/>
-                  chmod +x centos-web-terminal.sh<br/>
-                  ./centos-web-terminal.sh
-                </code>
-              </div>
-            </div>
-            
-            <div className="step">
-              <h3>Step 3: Reboot Server</h3>
-              <div className="code-block">
-                <code>sudo reboot</code>
-              </div>
-            </div>
-          </div>
-          
-          <button onClick={copySetupCommands} className="copy-btn">
-            📋 Copy All Commands
-          </button>
-        </div>
-
         <div className="info-card">
-          <h2>ℹ️ What You'll Get</h2>
-          <div className="features">
-            <div className="feature">
-              <strong>🖥️ Full CentOS Desktop:</strong> Complete GNOME desktop environment with file manager, applications, and GUI tools
-            </div>
-            <div className="feature">
-              <strong>💻 Web Terminal:</strong> Full-featured terminal with command history, colors, and all Linux commands
-            </div>
-            <div className="feature">
-              <strong>🌐 Browser Access:</strong> No VPN or special software needed - works directly in your browser
-            </div>
-            <div className="feature">
-              <strong>🔒 Secure Connection:</strong> Direct connection to your server bypassing company restrictions
-            </div>
-          </div>
+          <h2>ℹ️ How It Works</h2>
+          <p>This dashboard provides direct browser access to your CentOS server:</p>
+          <ul>
+            <li><strong>Desktop Access:</strong> Full GNOME desktop environment (Port 6080)</li>
+            <li><strong>Terminal Access:</strong> Web-based terminal interface (Port 7681)</li>
+            <li><strong>Setup Guide:</strong> Complete installation instructions</li>
+          </ul>
         </div>
       </main>
 
@@ -162,7 +108,7 @@ chmod +x centos-web-terminal.sh
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          max-width: 1000px;
+          max-width: 800px;
           width: 100%;
         }
 
@@ -183,7 +129,7 @@ chmod +x centos-web-terminal.sh
           margin-bottom: 2rem;
         }
 
-        .access-card, .setup-card, .info-card {
+        .access-card, .info-card {
           padding: 2rem;
           margin: 1rem 0;
           background: rgba(255,255,255,0.1);
@@ -191,10 +137,9 @@ chmod +x centos-web-terminal.sh
           border-radius: 15px;
           border: 1px solid rgba(255,255,255,0.2);
           width: 100%;
-          max-width: 800px;
         }
 
-        .access-card h2, .setup-card h2, .info-card h2 {
+        .access-card h2, .info-card h2 {
           color: white;
           margin-bottom: 1rem;
           text-align: center;
@@ -219,9 +164,9 @@ chmod +x centos-web-terminal.sh
           color: rgba(255,255,255,0.6);
         }
 
-        .access-buttons {
+        .button-group {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 1rem;
         }
 
@@ -233,20 +178,19 @@ chmod +x centos-web-terminal.sh
           font-weight: bold;
           cursor: pointer;
           transition: all 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
+          color: white;
         }
 
         .access-btn.desktop {
           background: linear-gradient(135deg, #4CAF50, #45a049);
-          color: white;
         }
 
         .access-btn.terminal {
           background: linear-gradient(135deg, #2196F3, #1976D2);
-          color: white;
+        }
+
+        .access-btn.setup {
+          background: linear-gradient(135deg, #FF9800, #F57C00);
         }
 
         .access-btn:hover:not(:disabled) {
@@ -259,71 +203,21 @@ chmod +x centos-web-terminal.sh
           cursor: not-allowed;
         }
 
-        .port-info {
-          font-size: 0.9rem;
-          opacity: 0.8;
-        }
-
-        .setup-steps {
-          margin: 1.5rem 0;
-        }
-
-        .step {
-          margin-bottom: 2rem;
-        }
-
-        .step h3 {
+        .info-card {
           color: white;
-          margin-bottom: 0.5rem;
         }
 
-        .code-block {
-          background: rgba(0,0,0,0.3);
-          border-radius: 8px;
-          padding: 1rem;
+        .info-card ul {
+          text-align: left;
+          margin: 1rem 0;
+        }
+
+        .info-card li {
           margin: 0.5rem 0;
         }
 
-        .code-block code {
-          color: #00ff00;
-          font-family: 'Courier New', monospace;
-          font-size: 0.9rem;
-          line-height: 1.4;
-        }
-
-        .copy-btn {
-          background: linear-gradient(135deg, #FF9800, #F57C00);
-          color: white;
-          border: none;
-          padding: 1rem 2rem;
-          border-radius: 8px;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          display: block;
-          margin: 1rem auto 0;
-        }
-
-        .copy-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .features {
-          display: grid;
-          gap: 1rem;
-        }
-
-        .feature {
-          color: white;
-          padding: 1rem;
-          background: rgba(255,255,255,0.05);
-          border-radius: 8px;
-          border-left: 4px solid #4CAF50;
-        }
-
         @media (max-width: 768px) {
-          .access-buttons {
+          .button-group {
             grid-template-columns: 1fr;
           }
           
@@ -331,285 +225,9 @@ chmod +x centos-web-terminal.sh
             font-size: 2rem;
           }
           
-          .access-card, .setup-card, .info-card {
+          .access-card, .info-card {
             padding: 1rem;
             margin: 0.5rem;
-          }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-        <p className="description">
-          Access your Hetzner server securely through this Vercel deployment
-        </p>
-
-        {!isConnected ? (
-          <div className="connection-card">
-            <h2>Access Your CentOS Server</h2>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Enter your CentOS server IP (e.g., 192.168.1.100)"
-                value={serverUrl}
-                onChange={(e) => setServerUrl(e.target.value)}
-                className="server-input"
-              />
-              <button onClick={connectToServer} className="connect-btn" disabled={loading}>
-                {loading ? 'Connecting...' : 'Connect'}
-              </button>
-            </div>
-            <div className="setup-info">
-              <h3>🚀 First Time Setup Required</h3>
-              <p>To access your CentOS desktop and terminal, run these commands on your server:</p>
-              <div className="code-block">
-                <code>
-                  # Download and run GUI setup<br/>
-                  wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-gui-setup.sh<br/>
-                  chmod +x centos-gui-setup.sh<br/>
-                  ./centos-gui-setup.sh<br/><br/>
-                  # Download and run terminal setup<br/>
-                  wget https://raw.githubusercontent.com/swiffc/hetzner-server-dashboard/main/centos-web-terminal.sh<br/>
-                  chmod +x centos-web-terminal.sh<br/>
-                  ./centos-web-terminal.sh
-                </code>
-              </div>
-          </div>
-
-          <div className="card">
-            <h2>Server Management</h2>
-            <div className="button-group">
-              <button className="action-btn">SSH Terminal</button>
-              <button className="action-btn">File Manager</button>
-              <button className="action-btn">System Monitor</button>
-              <button className="action-btn">Docker Containers</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <h2>Quick Actions</h2>
-            <div className="button-group">
-              <button className="action-btn secondary">Restart Services</button>
-              <button className="action-btn secondary">View Logs</button>
-              <button className="action-btn secondary">Backup Data</button>
-              <button className="action-btn secondary">Update System</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <h2>Server Status</h2>
-            <div className="status-grid">
-              <div className="status-item">
-                <span>CPU Usage</span>
-                <span className="status-value">--</span>
-              </div>
-              <div className="status-item">
-                <span>Memory</span>
-                <span className="status-value">--</span>
-              </div>
-              <div className="status-item">
-                <span>Disk Space</span>
-                <span className="status-value">--</span>
-              </div>
-              <div className="status-item">
-                <span>Uptime</span>
-                <span className="status-value">--</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <style jsx>{`
-        .container {
-          min-height: 100vh;
-          padding: 0 0.5rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .main {
-          padding: 5rem 0;
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          max-width: 1200px;
-          width: 100%;
-        }
-
-        .title {
-          margin: 0;
-          line-height: 1.15;
-          font-size: 4rem;
-          text-align: center;
-          color: white;
-          text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .description {
-          text-align: center;
-          line-height: 1.5;
-          font-size: 1.5rem;
-          color: rgba(255,255,255,0.8);
-          margin-bottom: 2rem;
-        }
-
-        .grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 2rem;
-          width: 100%;
-          max-width: 1000px;
-        }
-
-        .card {
-          padding: 1.5rem;
-          text-align: left;
-          color: inherit;
-          text-decoration: none;
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 10px;
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(10px);
-          transition: all 0.3s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-        }
-
-        .card h2 {
-          margin: 0 0 1rem 0;
-          font-size: 1.5rem;
-          color: white;
-        }
-
-        .input-group {
-          display: flex;
-          gap: 0.5rem;
-          margin-bottom: 1rem;
-        }
-
-        .server-input {
-          flex: 1;
-          padding: 0.75rem;
-          border: 1px solid rgba(255,255,255,0.3);
-          border-radius: 5px;
-          background: rgba(255,255,255,0.1);
-          color: white;
-          font-size: 1rem;
-        }
-
-        .server-input::placeholder {
-          color: rgba(255,255,255,0.6);
-        }
-
-        .connect-btn {
-          padding: 0.75rem 1.5rem;
-          background: #4CAF50;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 1rem;
-          transition: background 0.3s ease;
-        }
-
-        .connect-btn:hover {
-          background: #45a049;
-        }
-
-        .button-group {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-          gap: 0.5rem;
-        }
-
-        .action-btn {
-          padding: 0.75rem;
-          background: rgba(255,255,255,0.2);
-          color: white;
-          border: 1px solid rgba(255,255,255,0.3);
-          border-radius: 5px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 0.9rem;
-        }
-
-        .action-btn:hover {
-          background: rgba(255,255,255,0.3);
-          transform: translateY(-2px);
-        }
-
-        .action-btn.secondary {
-          background: rgba(255,255,255,0.1);
-        }
-
-        .status {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: white;
-          margin-top: 1rem;
-        }
-
-        .status-indicator {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: #4CAF50;
-          animation: pulse 2s infinite;
-        }
-
-        .status-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
-
-        .status-item {
-          display: flex;
-          justify-content: space-between;
-          color: white;
-          padding: 0.5rem 0;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .status-value {
-          font-weight: bold;
-          color: #4CAF50;
-        }
-
-        @keyframes pulse {
-          0% {
-            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
-          }
-          70% {
-            box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
-          }
-          100% {
-            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-          }
-        }
-
-        @media (max-width: 600px) {
-          .grid {
-            grid-template-columns: 1fr;
-          }
-          
-          .title {
-            font-size: 2.5rem;
-          }
-          
-          .input-group {
-            flex-direction: column;
           }
         }
       `}</style>
