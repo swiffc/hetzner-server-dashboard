@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Head from 'next/head';
 
 export default function CentOSAccess() {
-  const [serverIp, setServerIp] = useState('');
+  const [serverIp, setServerIp] = useState('5.78.70.68');
 
   const openCentOSDesktop = () => {
     if (serverIp) {
