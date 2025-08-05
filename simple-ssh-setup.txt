@@ -1,0 +1,30 @@
+## Simple SSH Setup Commands (Type These One by One)
+
+# Update packages
+apt update
+
+# Install SSH server
+apt install -y openssh-server
+
+# Start SSH service
+systemctl start ssh
+systemctl enable ssh
+
+# Create SSH directory
+mkdir -p ~/.ssh
+
+# Add SSH key (type this carefully)
+echo "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGmE8IfzQ9okdGTaNqaEgLcXpEhlJNqdPPSy3wQICetJ hetzner-clean" > ~/.ssh/authorized_keys
+
+# Set permissions
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+
+# Restart SSH
+systemctl restart ssh
+
+# Check status
+systemctl status ssh
+
+# Check if port 22 is open
+netstat -tlnp | grep :22
